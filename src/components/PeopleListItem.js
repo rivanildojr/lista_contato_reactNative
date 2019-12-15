@@ -2,10 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const PeopleListItem = props => {
-  const { people } = props;
+  const { people, navigateToPeopleDetail } = props;
   const { title, first, last } = people.name;
   return (
-    <TouchableOpacity onPress={() => console.log("Clicou em mim!" + first)}>
+    <TouchableOpacity
+      onPress={() => {
+        console.log("Clicou em mim!" + first);
+        navigateToPeopleDetail({ people });
+      }}
+    >
       <View style={styles.line}>
         <Image
           style={styles.avatar}
