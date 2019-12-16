@@ -10,23 +10,25 @@ export default class App extends React.Component {
 
     this.state = {
       peoples: [],
-      loading: false
+      loading: false,
+      error: false
     };
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-    setTimeout(() => {
-      axios
-        .get("https://randomuser.me/api/?nat=br&results=150")
-        .then(response => {
-          const { results } = response.data;
-          this.setState({
-            peoples: results,
-            loading: false
-          });
+    axios
+      .get("https://randomuser.me/api/?nat=br&results=150")
+      .then(response => {
+        const { results } = response.data;
+        this.setState({
+          peoples: results,
+          loading: false
         });
-    }, 3500);
+      })
+      .catch(error => {
+        this.setState({ error: true, loading: false });
+      });
   }
 
   render() {
@@ -34,6 +36,8 @@ export default class App extends React.Component {
       <View style={styles.container}>
         {this.state.loading ? (
           <ActivityIndicator size="large" color="#6ca2f7" />
+        ) : this.state.error ? (
+          <Text style={styles.error}>Ops... Algo deu errado =(</Text>
         ) : (
           <PeopleList
             peoples={this.state.peoples}
@@ -51,5 +55,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center"
+  },
+  error: {
+    color: "red",
+    alignSelf: "center"
   }
 });
